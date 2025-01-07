@@ -31,7 +31,7 @@
                 <div class="col-lg-6">
                     <div class="form-group mb-3">
                         <label for="ber_tgl" class="form-label fw-bold">Tanggal Berita</label>
-                        <input type="date" name="ber_tgl" id="ber_tgl" class="form-control" value="{{ $berita->ber_tgl }}" required>
+                        <input type="date" name="ber_tgl" id="ber_tgl" class="form-control" value="{{ old('ber_tgl', $berita->ber_tgl) }}" required>
                     </div>
                 </div>
                 <div class="col-lg-6">

@@ -97,8 +97,10 @@
             }
 
             .nav-item:hover {
+                color: white;
                 background-color: #183667;
                 border-radius: 12px;
+                
             }
         }
 
@@ -145,6 +147,7 @@
             .nav-item:hover {
                 background-color: #183667;
                 border-radius: 8px;
+                color: white;
             }
         }
 
