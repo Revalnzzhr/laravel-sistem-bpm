@@ -38,3 +38,16 @@ Route::put('/kegiatan/jadwal/update/{id}', [KegiatanController::class, 'updateJa
 Route::get('/kegiatan/jadwal/show/{id}', [KegiatanController::class, 'showJadwal'])->name('jadwalKegiatan.show');
 Route::delete('/kegiatan/jadwal/{id}/delete', [KegiatanController::class, 'deleteJadwal'])->name('jadwalKegiatan.delete');
 Route::get('/kegiatan/jadwal/search', [KegiatanController::class, 'searchJadwal'])->name('jadwalKegiatan.search');
+
+
+Route::get('/kegiatan/dokumentasi', [KegiatanController::class, 'indexDokum'])->name('dokumentasiKegiatan.index');
+Route::get('/kegiatan/dokumentasi/read', [KegiatanController::class, 'readDokum'])->name('dokumentasiKegiatan.read');
+Route::get('/kegiatan/dokumentasi/add', [KegiatanController::class, 'addDokum'])->name('dokumentasiKegiatan.add');
+Route::get('/kegiatan/dokumentasi/{id}', [KegiatanController::class, 'getKegiatanDetails']);
+Route::post('/kegiatan/dokumentasi/save/{id}', [KegiatanController::class, 'storeDokum'])->name('dokumentasiKegiatan.store');
+Route::get('/kegiatan/dokumentasi/edit/{id}', [KegiatanController::class, 'editDokum'])->name('dokumentasiKegiatan.edit');
+Route::put('/kegiatan/dokumentasi/update/{id}', [KegiatanController::class, 'updateDokum'])->name('dokumentasiKegiatan.update');
+Route::get('/kegiatan/dokumentasi/show/{id}', [KegiatanController::class, 'showDokum'])->name('dokumentasiKegiatan.show');
+Route::delete('/kegiatan/dokumentasi/{id}/delete', [KegiatanController::class, 'deleteDokum'])->name('dokumentasiKegiatan.delete');
+Route::get('/kegiatan/dokumentasi/search', [KegiatanController::class, 'searchDokum'])->name('dokumentasiKegiatan.search');
+
