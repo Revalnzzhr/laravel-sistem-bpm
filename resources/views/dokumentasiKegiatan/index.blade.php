@@ -4,6 +4,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 
+<style>
+    .keg-item .nav-link {
+            color:rgb(170, 200, 252);
+        }
+
+        /* Nav Desktop View */
+        @media (min-width: 1200px) {
+            .nav .keg-item {
+                margin-right: 15px;
+            }
+
+
+            .keg-item:hover {
+               
+                background-color: #2654A1;
+                border-radius: 12px;
+                
+            }
+        }
+</style>
 <div class="container mt-4 mb-5">
     <div class="text-center mb-4">
         <h2 style="color:#2654A1; font-size: 1.8rem; font-weight: 700;">
@@ -18,7 +38,7 @@
     <!-- Tabs for Jenis Kegiatan -->
     <ul class="nav nav-tabs mb-3" id="jenisKegiatanTabs" role="tablist">
         @foreach($jenisKegiatan as $jenis)
-            <li class="nav-item" role="presentation">
+            <li class="keg-item" style="color:black !important;" role="presentation">
                 <button class="nav-link @if($loop->first) active @endif" id="tab-{{ $jenis->jkg_id }}" data-bs-toggle="tab" data-bs-target="#content-{{ $jenis->jkg_id }}" type="button" role="tab" aria-controls="content-{{ $jenis->jkg_id }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">
                     {{ $jenis->jkg_nama }}
                 </button>
@@ -47,7 +67,7 @@
                     @foreach($kegiatanPerTahun as $tahun => $kegiatanList)
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-{{ $jenis->jkg_id }}-{{ $tahun }}">
-                            <button class="accordion-button @if(!$loop->first) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $jenis->jkg_id }}-{{ $tahun }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="collapse-{{ $jenis->jkg_id }}-{{ $tahun }}">
+                            <button class="accordion-button @if(!$loop->first) collapsed @endif" type="button" data-bs-toggle   ="collapse" data-bs-target="#collapse-{{ $jenis->jkg_id }}-{{ $tahun }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}" aria-controls="collapse-{{ $jenis->jkg_id }}-{{ $tahun }}">
                                 {{ $tahun }}
                             </button>
                         </h2>

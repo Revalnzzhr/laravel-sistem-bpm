@@ -104,52 +104,7 @@
             }
         }
 
-        /* Nav Mobile View */
-        @media (max-width: 60vh) {
-            .navmenu {
-                position: absolute;
-                left: 0;
-                top: 1rem;
-                width: 100%;
-                transition: top 0.4s, opacity 0.3s;
-            }
-
-            .navmenu::-webkit-scrollbar {
-                width: 0;
-            }
-
-            .nav {
-                background-color: #2654A1;
-                padding-top: 1rem;
-                display: block;
-                width: 100vh;
-            }
-
-            .dropdown-submenu {
-                position: relative;
-            }
-
-            .dropdown-submenu .dropdown-menu {
-                top: 0;
-                margin-top: 0;
-                display: none;
-            }
-
-            .dropdown:hover>.dropdown-menu,
-            .dropdown-submenu:hover>.dropdown-menu {
-                display: block;
-            }
-
-            .dropdown-item:hover {
-                background-color: #d3e3ff;
-            }
-
-            .nav-item:hover {
-                background-color: #183667;
-                border-radius: 8px;
-                color: white;
-            }
-        }
+      
 
         /* Animations */
         @keyframes fadeUp {
@@ -224,8 +179,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <button class="btn bg-white shadow-sm border-0">Masuk</button>
+                    <button class="btn bg-white shadow-sm border-0" style="color:black;" onclick="window.location.href='{{ url('/login') }}';">Masuk</button>
                 </li>
+
 
             </ul>
         </div>

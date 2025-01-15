@@ -6,7 +6,11 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\KegiatanController;
 
 Route::get('/', function () {
-    return view('layouts.app');
+    return view('beranda.index');
+});
+
+Route::get('/login', function () {
+    return view('login.index');
 });
 
 
