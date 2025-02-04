@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\PeraturanController;
 
 Route::get('/', function () {
     return view('beranda.index');
@@ -55,3 +56,39 @@ Route::get('/kegiatan/dokumentasi/show/{id}', [KegiatanController::class, 'showD
 Route::delete('/kegiatan/dokumentasi/{id}/delete', [KegiatanController::class, 'deleteDokum'])->name('dokumentasiKegiatan.delete');
 Route::get('/kegiatan/dokumentasi/search', [KegiatanController::class, 'searchDokum'])->name('dokumentasiKegiatan.search');
 
+Route::get('/peraturan/{type}', [PeraturanController::class, 'index'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.index');
+
+Route::get('/peraturan/{type}/create', function ($type) {
+    return view('peraturan.add', ['type' => $type]);
+})->where('type', 'kebijakan|eksternal|instrument')->name('peraturan.create');
+Route::get('/peraturan/{type}/{id}/show', [PeraturanController::class, 'show'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.show');
+Route::get('/peraturan/{type}/{id}/edit', [PeraturanController::class, 'edit'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.edit');
+Route::post('/peraturan/store', [PeraturanController::class, 'store'])->name('peraturan.store');
+Route::put('/peraturan/{type}/{id}', [PeraturanController::class, 'update'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.update');
+Route::get('/peraturan/{type}/{id}/download', [PeraturanController::class, 'download'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.download');
+Route::put('/peraturan/{type}/{id}/toggle', [PeraturanController::class, 'toggleStatus'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.toggle');
+Route::get('/peraturan/{type}/{id}/upload', [PeraturanController::class, 'showUploadForm'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.upload');
+
+Route::put('/peraturan/{type}/{id}/update-file', [PeraturanController::class, 'updateUnggah'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.updateFile');
+Route::get('/peraturan/{type}/{id}/history', [PeraturanController::class, 'showHistory'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.history');
+Route::get('/peraturan/{type}/{id}/history-download', [PeraturanController::class, 'showHistoryDownload'])
+    ->where('type', 'kebijakan|eksternal|instrument')
+    ->name('peraturan.historyDownload');
