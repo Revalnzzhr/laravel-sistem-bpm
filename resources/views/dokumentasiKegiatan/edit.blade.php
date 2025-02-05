@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="keg_jam_mulai" class="form-label fw-bold">Waktu Mulai</label>
-                        <input type="time" name="keg_jam_mulai" id="keg_jam_mulai" class="form-control" value="{{ old('keg_jam_mulai', $kegiatan->keg_jam_mulai) }}" required>
+                        <input type="time" name="keg_jam_mulai" id="keg_jam_mulai" class="form-control" value="{{ old('keg_jam_mulai', \Carbon\Carbon::parse($kegiatan->keg_jam_mulai)->format('H:i')) }}" required>
                         @error('keg_jam_mulai')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -65,21 +65,21 @@
                 <div class="col-lg-6">
                     <div class="form-group mb-3">
                         <label for="keg_tempat" class="form-label fw-bold">Tempat</label>
-                        <input type="text" name="keg_tempat" id="keg_tempat" class="form-control" value="{{ old('keg_tempat', $kegiatan->keg_tempat) }}" required>
+                        <input type="text" name="keg_tempat" id="keg_tempat" class="form-control"  max="{{ date('Y-m-d') }}" value="{{ old('keg_tempat', $kegiatan->keg_tempat) }}" required>
                         @error('keg_tempat')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group mb-3">
                         <label for="keg_tgl_selesai" class="form-label fw-bold">Tanggal Selesai</label>
-                        <input type="date" name="keg_tgl_selesai" id="keg_tgl_selesai" class="form-control" value="{{ old('keg_tgl_selesai', $kegiatan->keg_tgl_selesai) }}" required>
+                        <input type="date" name="keg_tgl_selesai" id="keg_tgl_selesai" class="form-control"  max="{{ date('Y-m-d') }}" value="{{ old('keg_tgl_selesai', $kegiatan->keg_tgl_selesai) }}" required>
                         @error('keg_tgl_selesai')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group mb-3">
                         <label for="keg_jam_selesai" class="form-label fw-bold">Waktu Selesai</label>
-                        <input type="time" name="keg_jam_selesai" id="keg_jam_selesai" class="form-control" value="{{ old('keg_jam_selesai', $kegiatan->keg_jam_selesai) }}" required>
+                        <input type="time" name="keg_jam_selesai" id="keg_jam_selesai" class="form-control"value="{{ old('keg_jam_selesai', \Carbon\Carbon::parse($kegiatan->keg_jam_selesai)->format('H:i')) }}" required>
                         @error('keg_jam_selesai')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror

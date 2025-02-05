@@ -31,7 +31,7 @@ class KegiatanController extends Controller
         $jadwalKegiatan = Kegiatan::with('jenisKegiatan') 
             ->where('keg_status', 'aktif')
             ->orderBy('keg_tgl_selesai', 'DESC')
-            ->get();
+            ->paginate(5);
 
         return view('jadwalKegiatan.read', compact('jadwalKegiatan'));
     }
@@ -131,7 +131,7 @@ class KegiatanController extends Controller
             'keg_nama' => 'required|string|max:120',
             'jkg_id' => 'required|exists:bpm_msJenisKegiatan,jkg_id',
             'keg_tgl_mulai' => 'required|date',
-            'keg_tgl_selesai' => 'required|date|after_or_equal:keg_tgl_mulai', // Tanggal selesai harus sama atau setelah tanggal mulai
+            'keg_tgl_selesai' => 'required|date|after_or_equal:keg_tgl_mulai',
             'keg_jam_mulai' => 'required|date_format:H:i',
             'keg_jam_selesai' => 'required|date_format:H:i',
             'keg_tempat' => 'required|string|max:100',
@@ -139,7 +139,7 @@ class KegiatanController extends Controller
         ], [
             'keg_tgl_selesai.after_or_equal' => 'Tanggal selesai kegiatan harus sesudah tanggal mulai', // Pesan kustom
             'keg_jam_selesai.after' => 'Jam selesai kegiatan harus lebih besar dari jam mulai kegiatan jika tanggal mulai dan tanggal selesai sama',
-            // Tambahkan pesan kustom lainnya sesuai dengan kebutuhan
+            
         ]);
 
         // Validasi tambahan untuk tanggal dan waktu
@@ -229,7 +229,7 @@ class KegiatanController extends Controller
         $kegiatan = Kegiatan::where('keg_status', 'aktif')
             ->where('keg_kategori', 'Terlaksana')
             ->orderBy('keg_tgl_selesai', 'DESC')
-            ->get();
+            ->paginate(5);
         return view('dokumentasiKegiatan.read', compact('kegiatan'));
     }
 
@@ -343,25 +343,36 @@ class KegiatanController extends Controller
         if (!Cookie::has('username')) {
             return view('login.index');
         }
-
+    
         // Validasi data input
         $request->validate([
+            'keg_nama' => 'required|string|max:120',
+            'jkg_id' => 'required|exists:bpm_msJenisKegiatan,jkg_id',
+            'keg_tgl_mulai' => 'required|date',
+            'keg_tgl_selesai' => 'required|date|after_or_equal:keg_tgl_mulai', // Tanggal selesai harus sama atau setelah tanggal mulai
+            'keg_jam_mulai' => 'required|date_format:H:i',
+            'keg_jam_selesai' => 'required|date_format:H:i|after:keg_jam_mulai', // Jam selesai harus lebih besar dari jam mulai jika tanggal sama
+            'keg_tempat' => 'required|string|max:100',
+            'keg_deskripsi' => 'nullable|string',
             'keg_link_folder' => 'required|string|max:255',
             'keg_dok_notulen' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
             'keg_status_dok_notulen' => 'required|in:Privat,Publik',
             'keg_foto_sampul' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'keg_tgl_selesai.after_or_equal' => 'Tanggal selesai kegiatan harus sesudah tanggal mulai', // Pesan kustom
+            'keg_jam_selesai.after' => 'Jam selesai kegiatan harus lebih besar dari jam mulai kegiatan jika tanggal mulai dan tanggal selesai sama',
         ]);
-
+    
         // Cari kegiatan berdasarkan keg_id
         $kegiatan = Kegiatan::find($keg_id);
         if (!$kegiatan) {
             return redirect()->back()->with('error', 'Kegiatan tidak ditemukan');
         }
-
+    
         // Update data berdasarkan input
         $kegiatan->keg_link_folder = $request->input('keg_link_folder');
         $kegiatan->keg_status_dok_notulen = $request->input('keg_status_dok_notulen');
-
+    
         // Jika ada file dokumen notulen yang diunggah
         if ($request->hasFile('keg_dok_notulen')) {
             // Hapus file lama jika ada
@@ -372,7 +383,7 @@ class KegiatanController extends Controller
             $filePath = $file->store('kegiatan', 'public');
             $kegiatan->keg_dok_notulen = $filePath;
         }
-
+    
         // Jika ada file foto sampul yang diunggah
         if ($request->hasFile('keg_foto_sampul')) {
             // Hapus file lama jika ada
@@ -383,16 +394,29 @@ class KegiatanController extends Controller
             $fotoPath = $foto->store('kegiatan', 'public');
             $kegiatan->keg_foto_sampul = $fotoPath;
         }
-
+    
         // Update metadata
         $kegiatan->keg_modif_by = auth()->user()->name ?? 'System';
         $kegiatan->keg_modif_date = now();
-
+        $kegiatan->keg_kategori = 'Terlaksana';
+        
+        // Update data kegiatan
+        $kegiatan->update([
+            'jkg_id' => $request->jkg_id,
+            'keg_nama' => $request->keg_nama,
+            'keg_deskripsi' => $request->keg_deskripsi,
+            'keg_tgl_mulai' => $request->keg_tgl_mulai,
+            'keg_jam_mulai' => $request->keg_jam_mulai,
+            'keg_tgl_selesai' => $request->keg_tgl_selesai,
+            'keg_jam_selesai' => $request->keg_jam_selesai,
+            'keg_tempat' => $request->keg_tempat,
+    
+        ]);
+    
         // Simpan perubahan
-        $kegiatan->save();
-
         return redirect()->route('dokumentasiKegiatan.read')->with('success', 'Dokumentasi kegiatan berhasil diperbarui');
     }
+    
 
     public function showDokum($id): View
     {

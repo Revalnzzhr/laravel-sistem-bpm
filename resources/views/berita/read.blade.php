@@ -3,6 +3,21 @@
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+<style>
+    .pagination .page-item .page-link {
+        color: #2654A1; 
+        border: none;
+        font-weight: bold;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #2654A1; 
+        color: white;
+    }
+    .pagination .page-item .page-link:hover {
+        background-color: #E3EFFF;
+    }
+</style>
+
 
 <div class="d-flex flex-column min-vh-100 p-5 pt-0">
     <div class="ms-5 ps-3">
@@ -24,55 +39,55 @@
     </div>
 
     <div class="table-container bg-white p-3 ps-5 m-5 mt-0 rounded">
-        <table class="table table-hover table-striped table-bordered">
-            <thead style="text-align: center;">
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Judul Berita</th>
-                    <th scope="col">Tanggal</th>
-                    <th scope="col">Foto</th>
-                    <th scope="col">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php $i = 1; @endphp
-                @forelse ($berita as $data)
-                <tr class="align-middle">
-                    <td>{{$i++}}</td>
-                    <td style="max-width: 300px;">{{ $data->ber_judul }}</td>
-                    <td>{{ \Carbon\Carbon::parse($data->ber_tgl)->locale('id')->translatedFormat('l, d F Y') }}</td>
-                    <td style="max-width: 150px;"><img src="{{ asset('storage/' . $data->ber_foto1) }}" class="rounded" style="max-width: 150px"></td>
-                    <td style="width: 200px;">
-                        <form style="text-align: center;"
-                            id="delete-form-{{ $data->ber_id }}"
-                            action="{{ route('berita.delete', $data->ber_id) }}"
-                            method="POST"
-                            onsubmit="return confirmDelete(event, {{ $data->ber_id }});">
+    <table class="table table-hover table-striped table-bordered">
+        <thead style="text-align: center;">
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Judul Berita</th>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php $i = 1 + (($berita->currentPage() - 1) * 3); @endphp
+            @foreach ($berita as $data)
+            <tr class="align-middle">
+                <td>{{ $i++ }}</td>
+                <td style="max-width: 300px;">{{ $data->ber_judul }}</td>
+                <td>{{ \Carbon\Carbon::parse($data->ber_tgl)->locale('id')->translatedFormat('l, d F Y') }}</td>
+                <td style="max-width: 150px;">
+                    <img src="{{ asset('storage/' . $data->ber_foto1) }}" class="rounded" style="max-width: 150px">
+                </td>
+                <td style="width: 200px;">
+                    <form style="text-align: center;" 
+                          id="delete-form-{{ $data->ber_id }}" 
+                          action="{{ route('berita.delete', $data->ber_id) }}" 
+                          method="POST" 
+                          onsubmit="return confirmDelete(event, {{ $data->ber_id }});">
+                        <a href="{{ route('berita.show', $data->ber_id) }}" class="btn btn-success btn-sm me-1">
+                            <i class="mdi mdi-eye"></i>
+                        </a>
+                        <a href="{{ route('berita.edit', $data->ber_id) }}" class="btn btn-primary btn-sm me-1">
+                            <i class="mdi mdi-pencil"></i>
+                        </a>
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" onclick="confirmDelete(event, {{ $data->ber_id }})" class="btn btn-danger btn-sm me-1">
+                            <i class="mdi mdi-delete"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-                            <a href="{{ route('berita.show', $data->ber_id) }}" class=" btn btn-success btn-sm me-1">
-                                <i class="mdi mdi-eye"></i>
-                            </a>
-                            <a href="{{ route('berita.edit', $data->ber_id) }}" class="btn btn-primary btn-sm me-1">
-                                <i class="mdi mdi-pencil"></i>
-                            </a>
-
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" onclick="confirmDelete(event, {{ $data->ber_id }})" class="btn btn-danger btn-sm me-1">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
-
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr class="align-middle">
-                    <td colspan="6" class="text-center">Data tidak tersedia.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+<!-- Pagination -->
+<div class="d-flex justify-content-center mt-3">
+    {{ $berita->links('pagination::bootstrap-5') }}
+</div>
 
 </div>
 
@@ -117,5 +132,4 @@
 </script>
 
 @endsection
-
 @endsection

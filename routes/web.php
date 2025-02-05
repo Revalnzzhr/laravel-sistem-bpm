@@ -11,11 +11,20 @@ Route::get('/', function () {
     return view('beranda.index');
 });
 
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/')->withCookie(cookie()->forget('username')); // Hapus cookie
+})->name('logout');
 
 
 Route::get('/login', function () {
     return view('login.index');
 });
+
+Route::get('/profile', function () {
+    return view('profil.index');
+});
+
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 

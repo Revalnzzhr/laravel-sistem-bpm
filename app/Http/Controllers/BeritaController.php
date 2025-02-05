@@ -26,13 +26,14 @@ class BeritaController extends Controller
         if (!Cookie::has('username')) {
             return view('login.index');
         }
-
+        
+        // Fetch active news and order by ber_tgl in descending order, then paginate by 3 items per page
         $berita = Berita::where('ber_status', 'aktif')
             ->orderBy('ber_tgl', 'DESC')
-            ->get();
+            ->paginate(5); // Apply pagination here
+
         return view('berita.read', compact('berita'));
     }
-
     public function add(): View
     {
         if (!Cookie::has('username')) {
@@ -61,9 +62,7 @@ class BeritaController extends Controller
 
     public function see($id): View
     {
-        if (!Cookie::has('username')) {
-           return view('login.index');
-        }
+       
         $berita = Berita::findOrFail($id);
         return view('berita.see', compact('berita'));
     }
@@ -89,7 +88,7 @@ class BeritaController extends Controller
         $berita->ber_penulis = $request->ber_penulis;
         $berita->ber_isi = $request->ber_isi;
         $berita->ber_status = 'Aktif';
-        $berita->ber_created_by = 'user';
+        $berita->ber_created_by = Cookie::get('username', 'default_user');
         $berita->ber_created_date =   now();
 
         foreach (range(1, 3) as $index) {
@@ -124,7 +123,7 @@ class BeritaController extends Controller
         $berita->ber_tgl = $request->ber_tgl;
         $berita->ber_penulis = $request->ber_penulis;
         $berita->ber_isi = $request->ber_isi;
-        $berita->ber_modif_by = 'user';
+        $berita->ber_modif_by = Cookie::get('username', 'default_user');
         $berita->ber_modif_date =   now();
 
         foreach (range(1, 3) as $index) {
@@ -158,9 +157,7 @@ class BeritaController extends Controller
 
     public function search(Request $request): View
     {
-        if (!Cookie::has('username')) {
-           return view('login.index');
-        }
+    
 
         $query = $request->input('query');
 
@@ -173,9 +170,7 @@ class BeritaController extends Controller
 
     public function searchRead(Request $request): View
     {
-        if (!Cookie::has('username')) {
-           return view('login.index');
-        }
+       
 
         $query = $request->input('query');
 

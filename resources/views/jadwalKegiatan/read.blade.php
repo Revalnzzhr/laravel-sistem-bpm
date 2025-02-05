@@ -4,6 +4,21 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 
+<style>
+    .pagination .page-item .page-link {
+        color: #2654A1; 
+        border: none;
+        font-weight: bold;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #2654A1; 
+        color: white;
+    }
+    .pagination .page-item .page-link:hover {
+        background-color: #E3EFFF;
+    }
+</style>
+
 <div class="d-flex flex-column min-vh-100 p-5 pt-0">
     <div class="ms-5 ps-3">
         <div style="display: flex; align-items: center; ">
@@ -37,7 +52,7 @@
                 </tr>
             </thead>
             <tbody>
-                @php $i = 1; @endphp
+                @php $i = 1 + (($jadwalKegiatan->currentPage() - 1) * 3); @endphp
                 @forelse ($jadwalKegiatan as $data)
                 <tr class="align-middle">
                     <td>{{$i++}}</td>
@@ -80,6 +95,10 @@
             </tbody>
         </table>
     </div>
+
+    <div class="d-flex justify-content-center mt-3">
+    {{ $jadwalKegiatan->links('pagination::bootstrap-5') }}
+</div>
 
 </div>
 

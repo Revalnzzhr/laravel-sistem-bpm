@@ -16,7 +16,7 @@
     .card {
         padding: 50px;
         /* Optional padding for spacing */
-        background: lightgray;
+        background: white;
         border-radius: 20px;
         display: inline-block;
         /* Ensures it only takes up as much space as needed */
@@ -63,7 +63,7 @@
 </div>
 
 <div class="shadow bg-white rounded" style="padding: 5rem; margin: 8rem;">
-    <h2 style="color: #2654A1; font-weight: 700; text-align: left;">Sejarah BPM</h2>
+    <h2 style="color: #2654A1; font-weight: 700; text-align: left;"> <?= htmlspecialchars($tentangs[1]['ten_category']); ?></h2>
 
     <div class="row align-items-center">
         <div class="col-lg-4 col-md-6">
@@ -79,9 +79,9 @@
     <div class="row align-items-center">
         <div class="col-lg-6 col-md-6">
             <div class="shadow p-4 mt-5 bg-white rounded">
-                <h2 style="color: #2654A1; font-weight: 700; text-align: left;">SK Pendirian BPM</h2>
+                <h2 style="color: #2654A1; font-weight: 700; text-align: left;"> <?= htmlspecialchars($tentangs[7]['ten_category']); ?></h2>
                 <p style="text-align: left; font-size: 16px; color: grey;">SK Pendirian BPM dapat diakses dengan mengklik kolom dibawah ini:</p>
-                <a href="{{ url('path/to/file') }}" class="btn btn-primary" target="_blank">Unduh SK Pendirian</a>
+                <a href="{{ url('storage/tentang/' . $tentangs[7]['ten_isi']) }}" class="btn btn-primary" target="_blank">Unduh SK Pendirian</a>
             </div>
         </div>
         <div class="col-lg-6 col-md-6">
@@ -125,42 +125,34 @@
 </div>
 
 <div class="flex-grow-1" style="background-color: #193756; padding: 4rem;">
-    <div class="row">
-
-        <div class="col-lg-6 col-md-6 mb-3" style="padding: 2rem;">
-            <div class="card" style="padding-left: 3rem; padding: 3rem;">
-                <!-- HeaderText -->
-                <h2 style="color: #2654A1; text-align: center; font-size: 25px; font-weight: 700;">
-                    {!! $tentangs[2]['ten_category'] !!}
-                </h2>
-
-                <?php if (!empty($tentangs[2]['ten_isi'])): ?>
-                    <!-- Text -->
-                    <p style="text-align: justify; font-size: 16px; color: white;">
-                        {!! $tentangs[2]['ten_isi'] !!}
-                    </p>
-                <?php endif; ?>
-            </div>
+<div class="row d-flex align-items-stretch">
+    <div class="col-lg-6 col-md-6 mb-3 d-flex">
+        <div class="card flex-grow-1" style="padding: 3rem;">
+            <h2 style="color: #2654A1; text-align: center; font-size: 25px; font-weight: 700;">
+                {!! $tentangs[2]['ten_category'] !!}
+            </h2>
+            <?php if (!empty($tentangs[2]['ten_isi'])): ?>
+                <p style="text-align: justify; font-size: 16px; color: white;">
+                    {!! $tentangs[2]['ten_isi'] !!}
+                </p>
+            <?php endif; ?>
         </div>
-
-        <div class="col-lg-6 col-md-6 mb-3" style="padding: 2rem;">
-            <div class="card" style="padding-left: 3rem; padding: 3rem;">
-                <!-- HeaderText -->
-                <h2 style="color: #2654A1; text-align: center; font-size: 25px; font-weight: 700;">
-                    {!! $tentangs[3]['ten_category'] !!}
-                </h2>
-
-                <?php if (!empty($tentangs[3]['ten_isi'])): ?>
-                    <!-- Text -->
-                    <p style="text-align: justify; font-size: 16px; color: white !important;">
-                        {!! $tentangs[3]['ten_isi'] !!}
-                    </p>
-
-                <?php endif; ?>
-            </div>
-        </div>
-
     </div>
+
+    <div class="col-lg-6 col-md-6 mb-3 d-flex">
+        <div class="card flex-grow-1" style="padding: 3rem;">
+            <h2 style="color: #2654A1; text-align: center; font-size: 25px; font-weight: 700;">
+                {!! $tentangs[3]['ten_category'] !!}
+            </h2>
+            <?php if (!empty($tentangs[3]['ten_isi'])): ?>
+                <p <p style="text-align: justify !important; font-size: 16px !important; color: white !important;">
+                    {!! $tentangs[3]['ten_isi'] !!}
+                </p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
 </div>
 
 <div class="flex-grow-1 p-5" style="background-color: white;">

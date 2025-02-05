@@ -100,7 +100,7 @@
                     <button type="submit" class="btn btn-primary w-100">Simpan</button>
                 </div>
                 <div class="col-lg-6">
-                    <a href="{{ route('berita.read') }}" class="btn btn-danger w-100">Batal</a>
+                    <a href="{{ route('jadwalKegiatan.read') }}" class="btn btn-danger w-100">Batal</a>
                 </div>
             </div>
         </form>

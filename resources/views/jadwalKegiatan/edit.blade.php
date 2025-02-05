@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="keg_jam_mulai" class="form-label fw-bold">Waktu Mulai</label>
-                        <input type="time" name="keg_jam_mulai" id="keg_jam_mulai" class="form-control" value="{{ old('keg_jam_mulai', $kegiatan->keg_jam_mulai) }}" required>
+                        <input type="time" name="keg_jam_mulai" id="keg_jam_mulai" class="form-control" value="{{ old('keg_jam_mulai', \Carbon\Carbon::parse($kegiatan->keg_jam_mulai)->format('H:i')) }}" required>
                         @error('keg_jam_mulai')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -79,7 +79,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="keg_jam_selesai" class="form-label fw-bold">Waktu Selesai</label>
-                        <input type="time" name="keg_jam_selesai" id="keg_jam_selesai" class="form-control" value="{{ old('keg_jam_selesai', $kegiatan->keg_jam_selesai) }}" required>
+                        <input type="time" name="keg_jam_selesai" id="keg_jam_selesai" class="form-control" value="{{ old('keg_jam_selesai', \Carbon\Carbon::parse($kegiatan->keg_jam_selesai)->format('H:i')) }}" required>
                         @error('keg_jam_selesai')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -106,4 +106,47 @@
         </form>
     </div>
 </div>
+
+@section('scripts')
+<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        @if(session('error'))
+        Swal.fire({
+            title: 'Gagal!',
+            text: @json(session('error')),
+            icon: 'error',
+            confirmButtonText: 'Tutup'
+        });
+        @endif
+
+        @if(session('success'))
+        Swal.fire({
+            title: 'Berhasil!',
+            text: @json(session('success')),
+            icon: 'success',
+            confirmButtonText: 'Tutup'
+        });
+        @endif
+
+        CKEDITOR.replace('keg_deskripsi', {
+            toolbar: [{
+                    name: 'basicstyles',
+                    items: ['Bold', 'Italic', 'Underline']
+                },
+                {
+                    name: 'paragraph',
+                    items: ['NumberedList', 'BulletedList']
+                },
+                {
+                    name: 'links',
+                    items: ['Link']
+                }
+            ]
+        });
+    });
+</script>
+
+@endsection
 @endsection

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,8 +54,16 @@
             <div style="text-align: center;">
                 <img src="{{ asset('storage/bpm-logo-biru.png') }}" alt="Logo">
             </div>
+
+            <!-- Menampilkan alert jika ada pesan error -->
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('login') }}">
-            @csrf
+                @csrf
                 <div class="mb-3">
                     <label for="username" class="form-label mb-3">Username</label>
                     <input type="text" class="form-control" id="username" name="username" required>

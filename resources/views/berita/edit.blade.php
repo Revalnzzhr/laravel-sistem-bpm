@@ -31,7 +31,7 @@
                 <div class="col-lg-6">
                     <div class="form-group mb-3">
                         <label for="ber_tgl" class="form-label fw-bold">Tanggal Berita</label>
-                        <input type="date" name="ber_tgl" id="ber_tgl" class="form-control" value="{{ old('ber_tgl', $berita->ber_tgl) }}" required>
+                        <input type="date" name="ber_tgl" id="ber_tgl" class="form-control"  max="{{ date('Y-m-d') }}" value="{{ old('ber_tgl', \Carbon\Carbon::parse($berita->ber_tgl)->format('Y-m-d')) }}" required>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -77,7 +77,87 @@
 
 @section('scripts')
 <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+   // Fungsi untuk mereset input file & mengosongkan preview
+// Fungsi untuk mereset input file & mengosongkan preview
+function resetFileInput(input, preview) {
+    input.value = ''; // Reset input file
+    if (preview) {
+        preview.src = ''; // Kosongkan preview jika ada
+        preview.style.display = 'none';
+    }
+}
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    const allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    const maxFileSize = 2 * 1024 * 1024; // Maksimal 2MB
+    let isValid = true;
+
+    // Validasi ber_foto1 wajib diisi, kecuali sudah ada gambar lama
+    const fotoInput1 = document.getElementById('ber_foto1');
+    const preview1 = document.getElementById('preview_ber_foto1'); // Ambil elemen preview
+
+    if (!fotoInput1.files.length && (!preview1.src || preview1.src === '')) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Foto 1 wajib diisi.',
+        });
+        resetFileInput(fotoInput1, preview1);
+        fotoInput1.focus();
+        return;
+    }
+
+    // Loop untuk memeriksa semua input file
+    document.querySelectorAll('input[type="file"]').forEach((input) => {
+        const preview = document.getElementById(`preview_${input.id}`); // Ambil elemen preview sesuai ID
+
+        // Jika input kosong tetapi ada gambar lama, maka lolos validasi
+        if (!input.files.length && preview && preview.src && preview.src !== '') {
+            return;
+        }
+
+        if (input.files.length) {
+            const file = input.files[0];
+
+            // Validasi format file
+            if (!allowedExtensions.includes(file.type)) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Format Tidak Valid',
+                    text: `File pada ${input.name} harus berupa gambar (JPG, PNG, atau GIF).`,
+                });
+                resetFileInput(input, preview);
+                input.focus();
+                isValid = false;
+                return;
+            }
+
+            // Validasi ukuran file
+            if (file.size > maxFileSize) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ukuran Terlalu Besar',
+                    text: `Ukuran file pada ${input.name} tidak boleh lebih dari 2MB.`,
+                });
+                resetFileInput(input, preview);
+                input.focus();
+                isValid = false;
+                return;
+            }
+        }
+    });
+
+    if (!isValid) {
+        e.preventDefault();
+    }
+});
+
+
     document.addEventListener('DOMContentLoaded', () => {
         CKEDITOR.replace('ber_isi', {
             toolbar: [{

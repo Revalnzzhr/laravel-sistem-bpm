@@ -68,13 +68,15 @@
                 </p>
             </div>
             <div class="col-lg-6 col-md-6">
-                <label class="form-label fw-bold">Diubah oleh</label>
-                <p> {{ $berita->ber_modif_by }} </p>
-                <label class="form-label fw-bold">Diubah pada</label>
-                <p>
-                    {{ \Carbon\Carbon::parse($berita->ber_modif_date)->locale('id')->translatedFormat('l, d F Y') }}
-                </p>
-            </div>
+    <label class="form-label fw-bold">Diubah oleh</label>
+    <p> {{ $berita->ber_modif_by ?? '-' }} </p>  <!-- Jika null, tampilkan "-" -->
+    
+    <label class="form-label fw-bold">Diubah pada</label>
+    <p>
+        {{ $berita->ber_modif_date ? \Carbon\Carbon::parse($berita->ber_modif_date)->locale('id')->translatedFormat('l, d F Y') : '-' }}
+    </p>
+</div>
+
         </div>
 
     </div>
