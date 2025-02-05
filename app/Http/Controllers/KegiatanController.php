@@ -8,13 +8,14 @@ use App\Models\Kegiatan;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Validator;
+use Illuminate\Support\Facades\Cookie;
 
 
 class KegiatanController extends Controller
 {
     public function indexJadwal(): View
     {
-        // Fetch only active news and order by ber_tgl in descending order
+        
         $jadwalKegiatan = Kegiatan::where('keg_status', 'aktif')
             ->orderBy('keg_tgl_selesai', 'DESC')
             ->get();
@@ -23,7 +24,11 @@ class KegiatanController extends Controller
 
     public function readJadwal(): View
     {
-        $jadwalKegiatan = Kegiatan::with('jenisKegiatan') // Mengambil relasi jenis kegiatan
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
+        $jadwalKegiatan = Kegiatan::with('jenisKegiatan') 
             ->where('keg_status', 'aktif')
             ->orderBy('keg_tgl_selesai', 'DESC')
             ->get();
@@ -33,13 +38,20 @@ class KegiatanController extends Controller
 
     public function addJadwal(): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $jenisKegiatan = JenisKegiatan::all(); // Mengambil semua jenis kegiatan
         return view('jadwalKegiatan.add', compact('jenisKegiatan'));
     }
 
     public function storeJadwal(Request $request)
     {
-        // Validasi form input dengan pesan kustom
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $request->validate([
             'keg_nama' => 'required|string|max:120',
             'jkg_id' => 'required|exists:bpm_msJenisKegiatan,jkg_id',
@@ -89,6 +101,10 @@ class KegiatanController extends Controller
 
     public function showJadwal($id): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::findOrFail($id);
         $jenisKegiatan = JenisKegiatan::all();
         return view('jadwalKegiatan.show', compact('kegiatan', 'jenisKegiatan'));
@@ -96,6 +112,10 @@ class KegiatanController extends Controller
 
     public function editJadwal($id): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::findOrFail($id);
         $jenisKegiatan = JenisKegiatan::all();
         return view('jadwalKegiatan.edit', compact('kegiatan', 'jenisKegiatan'));
@@ -103,6 +123,10 @@ class KegiatanController extends Controller
 
     public function updateJadwal(Request $request, $id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $request->validate([
             'keg_nama' => 'required|string|max:120',
             'jkg_id' => 'required|exists:bpm_msJenisKegiatan,jkg_id',
@@ -153,6 +177,10 @@ class KegiatanController extends Controller
 
     public function deleteJadwal($id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::findOrFail($id);
         $kegiatan->keg_status = 'Tidak Aktif';
         $kegiatan->save();
@@ -162,6 +190,10 @@ class KegiatanController extends Controller
 
     public function searchJadwal(Request $request): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $query = $request->input('query');
 
         $jadwalKegiatan = Kegiatan::where('keg_status', 'Aktif')
@@ -176,6 +208,8 @@ class KegiatanController extends Controller
     // DOKUMENTASI KEGIATAN
     public function indexDokum(): View
     {
+      
+
         // Fetch only active news and order by ber_tgl in descending order
         $kegiatan = Kegiatan::where('keg_status', 'aktif')
             ->where('keg_kategori', 'Terlaksana')
@@ -187,6 +221,10 @@ class KegiatanController extends Controller
 
     public function readDokum(): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         // Fetch only active news and order by keg_tgl_selesai in descending order
         $kegiatan = Kegiatan::where('keg_status', 'aktif')
             ->where('keg_kategori', 'Terlaksana')
@@ -197,6 +235,10 @@ class KegiatanController extends Controller
 
     public function addDokum()
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::where('keg_status', 'aktif')
             ->where('keg_kategori', 'Terlewat')
             ->orderBy('keg_tgl_selesai', 'DESC')
@@ -214,6 +256,10 @@ class KegiatanController extends Controller
 
     public function getKegiatanDetails($id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::with('jenisKegiatan')->find($id);
 
         if (!$kegiatan) {
@@ -234,6 +280,10 @@ class KegiatanController extends Controller
 
     public function storeDokum(Request $request, $keg_id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         // Validasi data input langsung dengan validate
         $request->validate([
             'keg_link_folder' => 'required|string|max:255',
@@ -279,6 +329,10 @@ class KegiatanController extends Controller
     
     public function editDokum($id): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::findOrFail($id);
         $jenisKegiatan = JenisKegiatan::all();
         return view('dokumentasiKegiatan.edit', compact('kegiatan', 'jenisKegiatan'));
@@ -286,6 +340,10 @@ class KegiatanController extends Controller
 
     public function updateDokum(Request $request, $keg_id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         // Validasi data input
         $request->validate([
             'keg_link_folder' => 'required|string|max:255',
@@ -338,6 +396,10 @@ class KegiatanController extends Controller
 
     public function showDokum($id): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::findOrFail($id);
         $jenisKegiatan = JenisKegiatan::all();
         return view('dokumentasiKegiatan.show', compact('kegiatan', 'jenisKegiatan'));
@@ -345,6 +407,10 @@ class KegiatanController extends Controller
 
     public function deleteDokum($id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $kegiatan = Kegiatan::findOrFail($id);
         $kegiatan->keg_status = 'Tidak Aktif';
         $kegiatan->save();
@@ -354,6 +420,10 @@ class KegiatanController extends Controller
 
     public function searchDokum(Request $request): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $query = $request->input('query');
 
         $kegiatan = Kegiatan::where('keg_status', 'Aktif')

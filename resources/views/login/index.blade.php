@@ -1,15 +1,3 @@
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = htmlspecialchars($_POST['username']);
-    $password = htmlspecialchars($_POST['password']);
-
-    if ($username === 'admin' && $password === 'password') {
-        echo "<script>alert('Login berhasil!');</script>";
-    } else {
-        echo "<script>alert('Username atau password salah!');</script>";
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div style="text-align: center;">
                 <img src="{{ asset('storage/bpm-logo-biru.png') }}" alt="Logo">
             </div>
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('login') }}">
+            @csrf
                 <div class="mb-3">
                     <label for="username" class="form-label mb-3">Username</label>
                     <input type="text" class="form-control" id="username" name="username" required>

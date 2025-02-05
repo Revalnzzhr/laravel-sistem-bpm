@@ -31,9 +31,11 @@
         </h2>
     </div>
 
+    @if(Cookie::has('username'))
     <div class="d-flex justify-content-end mb-3">
         <a class="btn btn-primary" href="{{ route('dokumentasiKegiatan.read') }}">Kelola Dokumentasi Kegiatan</a>
     </div>
+    @endif
 
     <!-- Tabs for Jenis Kegiatan -->
     <ul class="nav nav-tabs mb-3" id="jenisKegiatanTabs" role="tablist">

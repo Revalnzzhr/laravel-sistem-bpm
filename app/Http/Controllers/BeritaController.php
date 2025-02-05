@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Berita;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\RedirectResponse;
 
 class BeritaController extends Controller
 {
@@ -21,7 +23,10 @@ class BeritaController extends Controller
 
     public function read(): View
     {
-        // Fetch only active news and order by ber_tgl in descending order
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $berita = Berita::where('ber_status', 'aktif')
             ->orderBy('ber_tgl', 'DESC')
             ->get();
@@ -30,29 +35,44 @@ class BeritaController extends Controller
 
     public function add(): View
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         return view('berita.add');
     }
 
     public function edit($id): View
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         $berita = Berita::findOrFail($id);
         return view('berita.edit', compact('berita'));
     }
 
     public function show($id): View
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         $berita = Berita::findOrFail($id);
         return view('berita.show', compact('berita'));
     }
 
     public function see($id): View
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         $berita = Berita::findOrFail($id);
         return view('berita.see', compact('berita'));
     }
 
     public function save(Request $request)
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         $request->validate([
             'ber_judul' => 'required|string|max:255',
             'ber_tgl' => 'required|date',
@@ -86,6 +106,9 @@ class BeritaController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         $request->validate([
             'ber_judul' => 'required|string|max:255',
             'ber_tgl' => 'required|date',
@@ -123,6 +146,9 @@ class BeritaController extends Controller
 
     public function delete($id)
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
         $berita = Berita::findOrFail($id);
         $berita->ber_status = 'Tidak Aktif';
         $berita->save();
@@ -132,6 +158,10 @@ class BeritaController extends Controller
 
     public function search(Request $request): View
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
+
         $query = $request->input('query');
 
         $berita = Berita::where('ber_status', 'aktif')
@@ -143,6 +173,10 @@ class BeritaController extends Controller
 
     public function searchRead(Request $request): View
     {
+        if (!Cookie::has('username')) {
+           return view('login.index');
+        }
+
         $query = $request->input('query');
 
         $berita = Berita::where('ber_status', 'aktif')

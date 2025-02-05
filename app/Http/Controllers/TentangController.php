@@ -9,6 +9,7 @@ use App\Models\Tentang;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cookie;
 
 
 class TentangController extends Controller
@@ -21,6 +22,10 @@ class TentangController extends Controller
 
     public function read(): View
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $tentangs = Tentang::all();
         return view('tentang.read', compact('tentangs'));
     }
@@ -28,18 +33,30 @@ class TentangController extends Controller
 
     public function show($id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $tentang = Tentang::findOrFail($id);
         return view('tentang.show', compact('tentang'));
     }
 
     public function edit($id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $tentang = Tentang::findOrFail($id);
         return view('tentang.edit', compact('tentang'));
     }
 
     public function update(Request $request, $id)
     {
+        if (!Cookie::has('username')) {
+            return view('login.index');
+        }
+
         $tentang = Tentang::findOrFail($id);
 
         // Validation rules based on the type of 'ten_isi' content

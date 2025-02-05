@@ -41,10 +41,11 @@
     }
 </style>
 <div class="latarGradasi mt-0">
+    @if(Cookie::has('username'))
     <div class="position-absolute top-0 end-0 p-5 mb-3" style="z-index: 20;">
-
         <a class="btn btn-primary" href="{{ route('tentang.read') }}">Kelola Tentang</a>
     </div>
+    @endif
 
     <img src="{{ asset('storage/assets/bangunan.png') }}" alt="Bangunan" style="position: absolute; bottom: 0; width: 100%; left: 0; z-index: 1;">
 

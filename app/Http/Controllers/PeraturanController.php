@@ -7,22 +7,18 @@ use App\Models\UnduhDokumen;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Cookie;
 
 
 class PeraturanController extends Controller
 {
-    // Menampilkan peraturan berdasarkan kategori kebijakan
-    // public function kebijakanIndex(): View
-    // {
-    //     $peraturan = Peraturan::where('dok_status', 'aktif')->get();
-
-
-    //     return view('peraturan.kebijakan.index', compact('peraturan'));
-    // }
-
+    
     public function index($type)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::where('dok_revisi', 0)->get();
 
         return view('peraturan.index', [
@@ -33,7 +29,10 @@ class PeraturanController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $request->validate([
             'dok_judul' => 'required|string|max:255',
             'dok_nomor_induk' => 'required|string|max:100',
@@ -72,6 +71,10 @@ class PeraturanController extends Controller
 
     public function show($type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
 
         return view('peraturan.show', [
@@ -82,7 +85,10 @@ class PeraturanController extends Controller
 
     public function edit($type, $id)
     {
-        // Ambil data berdasarkan dok_id
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
 
         // Kirim data dan tipe ke view edit.blade.php
@@ -94,7 +100,11 @@ class PeraturanController extends Controller
 
     public function update(Request $request, $type, $id)
     {
-        // Validasi input
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
+
         $request->validate([
             'dok_judul' => 'required|string|max:255',
             'dok_nomor_induk' => 'required|string|max:100',
@@ -137,6 +147,10 @@ class PeraturanController extends Controller
 
     public function download($type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Ambil data dengan dok_referensi = $id dan dok_id terbesar
         $peraturan = Peraturan::where('dok_referensi', $id)
             ->orderBy('dok_id', 'desc')
@@ -173,6 +187,10 @@ class PeraturanController extends Controller
 
     public function toggleStatus($type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Ambil data berdasarkan dok_id
         $peraturan = Peraturan::findOrFail($id);
 
@@ -191,6 +209,10 @@ class PeraturanController extends Controller
 
     public function showUploadForm($type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Ambil data berdasarkan dok_id
         $peraturan = Peraturan::findOrFail($id);
 
@@ -203,6 +225,10 @@ class PeraturanController extends Controller
 
     public function updateUnggah(Request $request, $type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $request->validate([
             'dok_file' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
@@ -243,6 +269,10 @@ class PeraturanController extends Controller
 
     public function showHistory($type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Ambil semua revisi terkait dokumen berdasarkan dok_referensi atau dok_id
         $history = Peraturan::where('dok_referensi', $id)
             ->orWhere('dok_id', $id)
@@ -258,6 +288,10 @@ class PeraturanController extends Controller
 
     public function showHistoryDownload($type, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Ambil data riwayat unduhan dan gabungkan dengan tabel bpm_msdokumen
         $history = UnduhDokumen::select('bpm_trunduhdokumen.*', 'bpm_msdokumen.dok_judul', 'bpm_msdokumen.dok_file')
             ->join('bpm_msdokumen', 'bpm_trunduhdokumen.dok_id', '=', 'bpm_msdokumen.dok_id')
@@ -282,12 +316,20 @@ class PeraturanController extends Controller
     // Menampilkan form untuk menambah peraturan kebijakan
     public function kebijakanAdd(): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         return view('peraturan.kebijakan.add');
     }
 
     // Menyimpan peraturan kebijakan
     public function kebijakanSave(Request $request)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Validasi inputan dari pengguna
         $request->validate([
             'dok_judul' => 'required|string|max:255',
@@ -323,6 +365,10 @@ class PeraturanController extends Controller
     // Menampilkan form untuk mengedit peraturan kebijakan berdasarkan ID
     public function kebijakanEdit($id): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
         return view('peraturan.kebijakan.edit', compact('peraturan'));
     }
@@ -330,6 +376,10 @@ class PeraturanController extends Controller
     // Memperbarui peraturan kebijakan
     public function kebijakanUpdate(Request $request, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Validasi inputan dari pengguna
         $request->validate([
             'dok_judul' => 'required|string|max:255',
@@ -363,6 +413,10 @@ class PeraturanController extends Controller
     // Menghapus (deactivate) peraturan kebijakan berdasarkan ID
     public function kebijakanDelete($id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
         $peraturan->dok_status = 'Tidak Aktif';
         $peraturan->save();
@@ -373,6 +427,10 @@ class PeraturanController extends Controller
     // Menampilkan peraturan berdasarkan kategori eksternal
     public function eksternalIndex(): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::where('dok_status', 'aktif')->get();
 
 
@@ -382,12 +440,20 @@ class PeraturanController extends Controller
     // Menampilkan form untuk menambah peraturan eksternal
     public function eksternalAdd(): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         return view('peraturan.eksternal.add');
     }
 
     // Menyimpan peraturan eksternal
     public function eksternalSave(Request $request)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Validasi inputan dari pengguna
         $request->validate([
             'dok_judul' => 'required|string|max:255',
@@ -423,6 +489,10 @@ class PeraturanController extends Controller
     // Menampilkan form untuk mengedit peraturan eksternal berdasarkan ID
     public function eksternalEdit($id): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
         return view('peraturan.eksternal.edit', compact('peraturan'));
     }
@@ -430,6 +500,11 @@ class PeraturanController extends Controller
     // Memperbarui peraturan eksternal
     public function eksternalUpdate(Request $request, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
+
         $request->validate([
             'dok_judul' => 'required|string|max:255',
             'dok_nomor_induk' => 'required|string',
@@ -459,6 +534,10 @@ class PeraturanController extends Controller
     // Menghapus peraturan eksternal berdasarkan ID
     public function eksternalDelete($id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
         $peraturan->dok_status = 'Tidak Aktif';
         $peraturan->save();
@@ -469,6 +548,10 @@ class PeraturanController extends Controller
     // Menampilkan peraturan berdasarkan kategori instrumen APS
     public function instrumenApsIndex(): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::where('dok_status', 'aktif')
             ->where('kategori', 'instrumen-aps')
             ->get();
@@ -479,12 +562,20 @@ class PeraturanController extends Controller
     // Menampilkan form untuk menambah peraturan instrumen APS
     public function instrumenApsAdd(): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         return view('peraturan.instrumenAps.add');
     }
 
     // Menyimpan peraturan instrumen APS
     public function instrumenApsSave(Request $request)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $request->validate([
             'dok_judul' => 'required|string|max:255',
             'dok_nomor_induk' => 'required|string|max:100',
@@ -517,6 +608,10 @@ class PeraturanController extends Controller
     // Menampilkan form untuk mengedit peraturan instrumen APS berdasarkan ID
     public function instrumenApsEdit($id): View
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
         return view('peraturan.instrumenAps.edit', compact('peraturan'));
     }
@@ -524,6 +619,10 @@ class PeraturanController extends Controller
     // Memperbarui peraturan instrumen APS
     public function instrumenApsUpdate(Request $request, $id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $request->validate([
             'dok_judul' => 'required|string|max:255',
             'dok_nomor_induk' => 'required|string',
@@ -553,6 +652,10 @@ class PeraturanController extends Controller
     // Menghapus peraturan instrumen APS berdasarkan ID
     public function instrumenApsDelete($id)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         $peraturan = Peraturan::findOrFail($id);
         $peraturan->dok_status = 'Tidak Aktif';
         $peraturan->save();
@@ -562,6 +665,10 @@ class PeraturanController extends Controller
 
     public function save(Request $request)
     {
+        if (!Cookie::has('username')) {
+            return redirect('/login');
+        }
+
         // Validasi input
         $validated = $request->validate([
             'dok_judul' => 'required|string',

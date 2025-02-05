@@ -75,9 +75,11 @@
         </h2>
     </div>
 
+    @if(Cookie::has('username'))
     <div style="display: flex; justify-content: flex-end; margin-right: 3rem; margin-bottom: 1rem;">
         <a class="btn btn-primary" href="{{ route('jadwalKegiatan.read') }}">Kelola Jadwal Kegiatan</a>
     </div>
+    @endif
 
     <div id="calendar-container">
         <div id="calendar"></div>

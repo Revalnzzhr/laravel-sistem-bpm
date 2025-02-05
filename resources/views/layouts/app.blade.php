@@ -174,13 +174,22 @@
                             <a class="dropdown-item" href="{{ url('/peraturan/eksternal') }}">Peraturan Eksternal</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ url('/peraturan/aps') }}">Instrumen APS</a>
+                            <a class="dropdown-item" href="{{ url('/peraturan/instrument') }}">Instrumen APS</a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <button class="btn bg-white shadow-sm border-0" style="color:black;" onclick="window.location.href='{{ url('/login') }}';">Masuk</button>
-                </li>
+                @if(Cookie::has('username'))
+                    <li class="nav-item">
+                        <button class="btn bg-white shadow-sm border-0" style="color:black;" onclick="window.location.href='{{ url('/profile') }}';">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="User Icon" style="width: 24px; height: 24px;">
+                        </button>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <button class="btn bg-white shadow-sm border-0" style="color:black;" onclick="window.location.href='{{ url('/login') }}';">Masuk</button>
+                    </li>
+                @endif
+
 
 
             </ul>

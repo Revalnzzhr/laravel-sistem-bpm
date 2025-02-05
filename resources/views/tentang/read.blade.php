@@ -57,13 +57,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 CDN -->
 <script>
     // Menampilkan SweetAlert jika ada pesan flash 'success'
-    if (session('success'))
-        Swal.fire({
-            title: 'Berhasil!',
-            text: '{{ session("success")}}',
-            icon: 'success',
-            confirmButtonText: 'Tutup'
-        });
+    @if(session('success'))
+    Swal.fire({
+        title: 'Berhasil!',
+        text: @json(session('success')),
+        icon: 'success',
+        confirmButtonText: 'Tutup'
+    });
+    @endif
 </script>
 @endsection
 

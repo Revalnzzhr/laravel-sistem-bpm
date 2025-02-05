@@ -53,9 +53,11 @@
 <div
     class="bg-image position-relative"
     style="background-image: url('{{ asset('storage/assets/gedung-astra-biru.png') }}'); background-size: cover; background-position: center; height: 100vh;">
+    @if(Cookie::has('username'))
     <div class="position-absolute top-0 end-0 p-5 mb-3" style="z-index: 20;">
         <a class="btn btn-primary" href="{{ route('berita.read') }}">Kelola Berita</a>
     </div>
+    @endif
 
     <div class="row">
         <div class="col-lg-4 col-md-6">

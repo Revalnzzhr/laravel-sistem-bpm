@@ -5,14 +5,20 @@ use App\Http\Controllers\TentangController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\PeraturanController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('beranda.index');
 });
 
+
+
 Route::get('/login', function () {
     return view('login.index');
 });
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
 
 
 Route::get('/tentang', [TentangController::class, 'index'])->name('tentang.index');
