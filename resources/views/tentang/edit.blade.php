@@ -58,14 +58,20 @@
                         @enderror
                     </div>
                 <?php elseif ($tentang->id == 8): ?>
+                    <div>
                     <input
                         type="file"
                         name="ten_isi"
                         id="ten_isi"
-                        class="form-control"
-                        accept=".pdf,.doc,.docx,.xls,.xlsx">
-                    <sub>
+                        class="form-control @error('ten_isi') is-invalid @enderror"
+                        accept=".pdf">
 
+                    <!-- Pesan error jika format file salah -->
+                    <div id="fileError" class="alert alert-danger mt-2" style="display: none;">
+                        File harus berupa PDF.
+                    </div>
+
+                    <sub>
                         Berkas saat ini:
                         <a
                             href="{{ asset('storage/tentang/' . $tentang->ten_isi) }}"
@@ -77,6 +83,8 @@
                         <br />
                         Unggah ulang jika ingin mengganti berkas yang sudah ada
                     </sub>
+                </div>
+
                 <?php else: ?>
                     <textarea
                         name="ten_isi"
@@ -121,7 +129,26 @@
         const previewText = document.querySelector('.preview-text');
         const form = document.getElementById('tentangForm');
 
+        const tenIsiInput = document.getElementById('ten_isi');
+        const fileError = document.getElementById('fileError');
 
+        if (tenIsiInput) {
+            tenIsiInput.addEventListener('change', () => {
+                const file = tenIsiInput.files[0];
+                
+                if (file && tenIsiInput.getAttribute('accept') === '.pdf') {
+                    const fileType = file.type;
+                    
+                    // Validasi format file
+                    if (fileType !== 'application/pdf') {
+                        fileError.style.display = 'block';
+                        tenIsiInput.value = ''; // Kosongkan input jika file tidak valid
+                    } else {
+                        fileError.style.display = 'none';
+                    }
+                }
+            });
+        }
 
 
         // Hanya aktifkan CKEditor jika elemen adalah textarea

@@ -176,7 +176,7 @@ class BeritaController extends Controller
 
         $berita = Berita::where('ber_status', 'aktif')
             ->where('ber_judul', 'like', '%' . $query . '%')
-            ->get();
+            ->paginate(5);
 
         return view('berita.read', compact('berita'))->with('query', $query);
     }

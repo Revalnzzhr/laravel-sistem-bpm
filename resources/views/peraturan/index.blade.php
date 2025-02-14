@@ -125,41 +125,47 @@
                             <td class="text-truncate" style="max-width: 300px;">{{ $data->dok_file ?? 'Tidak tersedia' }}
                             <td>
                                 <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                @if ($data->dok_status === 'Aktif')
                                     <a href="{{ url('/peraturan/' . request()->segment(2) . '/' . $data->dok_id . '/show') }}"
-                                        class="btn btn-success btn-sm">
-                                        <i class="mdi mdi-eye"></i>
+                                    class="btn btn-success btn-sm">
+                                    <i class="mdi mdi-eye"></i>
                                     </a>
                                     <a href="{{ url('/peraturan/' . request()->segment(2) . '/' . $data->dok_id . '/edit') }}"
-                                        class="btn btn-primary btn-sm">
-                                        <i class="mdi mdi-pencil"></i>
+                                    class="btn btn-primary btn-sm">
+                                    <i class="mdi mdi-pencil"></i>
                                     </a>
                                     <a href="{{ route('peraturan.upload', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
-                                        class="btn btn-info btn-sm">
-                                        <i class="mdi mdi-upload"></i>
+                                    class="btn btn-info btn-sm">
+                                    <i class="mdi mdi-upload"></i>
                                     </a>
                                     <a href="{{ route('peraturan.download', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
-                                        class="btn btn-warning btn-sm">
-                                        <i class="mdi mdi-download"></i>
+                                    class="btn btn-warning btn-sm">
+                                    <i class="mdi mdi-download"></i>
                                     </a>
+                                    <a href="{{ route('peraturan.history', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
+                                    class="btn btn-dark btn-sm">
+                                    <i class="fa fa-bars"></i>
+                                    </a>
+                                    <a href="{{ route('peraturan.historyDownload', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
+                                    class="btn btn-secondary btn-sm">
+                                    <i class="mdi mdi-clipboard-list"></i>
+                                    </a>
+                                @endif
+
+
                                     <a href="{{ route('peraturan.toggle', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
-                                        class="btn btn-secondary btn-sm"
+                                        class="btn {{ $data->dok_status === 'Aktif' ? 'btn-primary' : 'btn-secondary' }} btn-sm"
                                         onclick="event.preventDefault(); document.getElementById('toggle-form-{{ $data->dok_id }}').submit();">
                                         <i class="mdi mdi-toggle-switch"></i>
                                     </a>
+
                                     <form id="toggle-form-{{ $data->dok_id }}"
                                         action="{{ route('peraturan.toggle', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
                                         method="POST" style="display: none;">
                                         @csrf
                                         @method('PUT')
                                     </form>
-                                    <a href="{{ route('peraturan.history', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
-                                        class="btn btn-dark btn-sm">
-                                        <i class="fa fa-bars"></i>
-                                    </a>
-                                    <a href="{{ route('peraturan.historyDownload', ['type' => request()->segment(2), 'id' => $data->dok_id]) }}"
-                                        class="btn btn-secondary btn-sm">
-                                        <i class="mdi mdi-clipboard-list"></i>
-                                    </a>
+                                    
                                 </div>
                             </td>
                         </tr>

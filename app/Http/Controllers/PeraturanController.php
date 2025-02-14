@@ -57,7 +57,7 @@ class PeraturanController extends Controller
             'dok_file' => $filePath,
             'dok_revisi' => '0',
             'dok_status' => 'Aktif',
-            'dok_created_by' => 'Admin',
+            'dok_created_by' => Cookie::get('username', 'default_user'),
             'dok_created_date' => now(),
         ]);
 
@@ -111,22 +111,11 @@ class PeraturanController extends Controller
             'dok_tgl_berlaku' => 'required|date',
             'dok_tgl_kadaluarsa' => 'nullable|date|after_or_equal:dok_tgl_berlaku',
             'dok_control' => 'required|string|in:controlled,uncontrolled',
-            'dok_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            
         ]);
 
         // Ambil data berdasarkan dok_id
         $peraturan = Peraturan::findOrFail($id);
-
-        // Simpan file jika ada
-        $filePath = $peraturan->dok_file; // Pertahankan file lama
-        if ($request->hasFile('dok_file')) {
-            // Hapus file lama jika ada
-            if ($filePath) {
-                Storage::disk('public')->delete($filePath);
-            }
-            // Simpan file baru
-            $filePath = $request->file('dok_file')->store('dokumen', 'public');
-        }
 
         // Perbarui data di database
         $peraturan->update([
@@ -135,8 +124,7 @@ class PeraturanController extends Controller
             'dok_tgl_berlaku' => $request->dok_tgl_berlaku,
             'dok_tgl_kadaluarsa' => $request->dok_tgl_kadaluarsa,
             'dok_control' => $request->dok_control,
-            'dok_file' => $filePath,
-            'dok_modif_by' => 'Admin', // Sesuaikan jika menggunakan autentikasi
+            'dok_modif_by' => Cookie::get('username', 'default_user'), // Sesuaikan jika menggunakan autentikasi
             'dok_modif_date' => now(),
         ]);
 
@@ -169,7 +157,7 @@ class PeraturanController extends Controller
                 'udo_tgl_unduh' => now(), // Waktu pengunduhan
                 'udo_status' => 'Berhasil Diunduh', // Status
                 'udo_jenis_penyalinan' => $peraturan->dok_control, // Jenis penyalinan berdasarkan dok_control
-                'udo_created_by' => 'Admin', // Siapa yang mengunduh, atur sesuai kebutuhan
+                'udo_created_by' => Cookie::get('username', 'default_user'), // Siapa yang mengunduh, atur sesuai kebutuhan
                 'udo_created_date' => now(),
             ]);
 
@@ -259,7 +247,7 @@ class PeraturanController extends Controller
             'dok_referensi' => $id,
             'dok_revisi' => $newDokRevisi,
             'dok_status' => $existingPeraturan->dok_status,
-            'dok_created_by' => 'Admin',
+            'dok_created_by' => Cookie::get('username', 'default_user'),
             'dok_created_date' => now(),
         ]);
 
@@ -354,12 +342,12 @@ class PeraturanController extends Controller
             'dok_tgl_kadaluarsa' => $request->dok_tgl_kadaluarsa,
             'dok_file' => $filePath,
             'dok_status' => 'Aktif',
-            'dok_created_by' => 'admin', // ini bisa disesuaikan dengan user yang login
+            'dok_created_by' => Cookie::get('username', 'default_user'), // ini bisa disesuaikan dengan user yang login
             'dok_created_date' => now(),
             'kategori' => 'kebijakan',
         ]);
 
-        return redirect()->route('peraturan.kebijakan.index')->with('success', 'Peraturan kebijakan berhasil disimpan!');
+        return redirect()->route('peraturan.index')->with('success', 'Peraturan kebijakan berhasil disimpan!');
     }
 
     // Menampilkan form untuk mengedit peraturan kebijakan berdasarkan ID
@@ -478,7 +466,7 @@ class PeraturanController extends Controller
             'dok_tgl_kadaluarsa' => $request->dok_tgl_kadaluarsa,
             'dok_file' => $filePath,
             'dok_status' => 'Aktif',
-            'dok_created_by' => 'admin',
+            'dok_created_by' => Cookie::get('username', 'default_user'),
             'dok_created_date' => now(),
             'kategori' => 'eksternal',
         ]);
@@ -597,7 +585,7 @@ class PeraturanController extends Controller
             'dok_tgl_kadaluarsa' => $request->dok_tgl_kadaluarsa,
             'dok_file' => $filePath,
             'dok_status' => 'Aktif',
-            'dok_created_by' => 'admin',
+            'dok_created_by' => Cookie::get('username', 'default_user'),
             'dok_created_date' => now(),
             'kategori' => 'instrumen-aps',
         ]);

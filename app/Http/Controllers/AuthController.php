@@ -13,7 +13,7 @@ class AuthController extends Controller
         $password = $request->input('password');
 
         
-        if ($username === 'admin' && $password === 'password') {
+        if ($username === 'Admin' && $password === 'password') {
            
             Cookie::queue('username', $username, 60);
 

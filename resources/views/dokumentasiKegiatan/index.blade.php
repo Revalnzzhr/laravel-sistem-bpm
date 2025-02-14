@@ -95,7 +95,7 @@
                                                 <strong>Tempat:</strong> {{ $kegiatanItem->keg_tempat }}
                                             </p>
                                             <a href="{{ $kegiatanItem->keg_link_folder }}" class="btn btn-primary btn-sm" target="_blank">Galeri Selengkapnya</a>
-                                            @if($kegiatanItem->keg_status_dok_notulen === 'ada')
+                                            @if($kegiatanItem->keg_status_dok_notulen === 'Publik')
                                             <a href="{{ asset('storage/' . $kegiatanItem->keg_dok_notulen) }}" class="btn btn-danger btn-sm" target="_blank">File Notulen</a>
                                             @endif
                                         </div>

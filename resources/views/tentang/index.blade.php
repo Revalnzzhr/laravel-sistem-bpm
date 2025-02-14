@@ -13,6 +13,22 @@
         overflow: hidden;
     }
 
+    .latarGradasi2 {
+    background: linear-gradient(
+        to top,
+        #2654a1,
+        #2654a1,
+        #4989c2,
+        #42abdc
+    ); /* Gradasi warna */
+    height: 100%; /* Atur tinggi latar sesuai kebutuhan, contoh ini 40% tinggi layar */
+    width: 100%; /* 100% lebar layar */
+    display: flex; /* Agar konten bisa diatur menggunakan flexbox */
+    justify-content: center; /* Memposisikan konten horizontal di tengah */
+    position: relative;
+    overflow: hidden; /* Menghindari elemen keluar dari batas latar */
+    }
+
     .card {
         padding: 50px;
         /* Optional padding for spacing */
@@ -169,32 +185,38 @@
 
         <!-- Visi dan Misi -->
 
-        <div>
+        <div style="color: white;">
             <!-- HeaderText -->
             <h2 style="color: white; text-align: center; font-size: 35px; font-weight: 700;">
                 {!! $tentangs[4]['ten_category'] !!}
             </h2>
 
             <!-- Text -->
-            <?php if (!empty($tentangs[4]['ten_isi'])): ?>
-                <p style="text-align: center; font-size: 1rem;">
+            <div style="font-size: 18px">
+<?php if (!empty($tentangs[4]['ten_isi'])): ?>
+                <p style="color: white;text-align: center; font-size: 1rem;">
                     {!! $tentangs[4]['ten_isi'] !!}
                 </p>
             <?php endif; ?>
+            </div>
+            
         </div>
 
-        <div>
+        <div style="color: white;">
             <!-- HeaderText -->
             <h2 style="color: white; text-align: center; font-size: 35px; font-weight: 700;">
                 {!! $tentangs[5]['ten_category'] !!}
             </h2>
 
-            <!-- Text -->
+            <div style="font-size: 18px">
+                <!-- Text -->
             <?php if (!empty($tentangs[5]['ten_isi'])): ?>
                 <p style="text-align: center; font-size: 1rem;">
                     {!! $tentangs[5]['ten_isi'] !!}
                 </p>
             <?php endif; ?>
+            </div>
+            
         </div>
 
 

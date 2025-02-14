@@ -55,9 +55,10 @@
                             <label for="dok_control" class="form-label fw-bold">Control Type</label>
                             <select name="dok_control" id="dok_control" class="form-select">
                                 <option value="">Pilih Control Type</option>
-                                <option value="controlled">Controlled</option>
-                                <option value="uncontrolled">Uncontrolled</option>
+                                <option value="controlled" {{ $peraturan->dok_control == 'controlled' ? 'selected' : '' }}>Controlled</option>
+                                <option value="uncontrolled" {{ $peraturan->dok_control == 'uncontrolled' ? 'selected' : '' }}>Uncontrolled</option>
                             </select>
+
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -69,11 +70,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mb-4">
-                    <label for="dok_file" class="form-label fw-bold">Unggah Dokumen</label>
-                    <input type="file" name="dok_file" id="dok_file" class="form-control" accept="file/*"
-                        value="{{ $peraturan->dok_control }}">
-                </div>
+               
 
                 <div class="row mt-4">
                     <div class="col-lg-6">
@@ -89,18 +86,7 @@
 
 @section('scripts')
     <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
-    <script>
-        document.getElementById('dok_file').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                document.getElementById('preview').style.display = 'block';
-                document.getElementById('preview').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
-    </script>
+   
     <script>
         function redirectToParentURL() {
             // Ambil URL saat ini

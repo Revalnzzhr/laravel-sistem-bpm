@@ -6,6 +6,7 @@
         max-width: 100%;
         margin-top: 10px;
         display: none;
+        
     }
 </style>
 <div class="d-flex flex-column min-vh-100 p-5 pt-0">
@@ -72,7 +73,7 @@
 
             <div class="form-group mb-3">
                 <label for="keg_deskripsi" class="form-label fw-bold">Deskripsi Singkat</label>
-                <p> {{ $kegiatan->keg_deskripsi }}</p>
+                <p>{!! $kegiatan->keg_deskripsi !!}</p>
             </div>
 
             <div class="row">

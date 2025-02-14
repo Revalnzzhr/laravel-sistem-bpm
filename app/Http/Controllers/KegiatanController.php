@@ -92,7 +92,7 @@ class KegiatanController extends Controller
             'keg_tempat' => $request->keg_tempat,
             'keg_kategori' => $status,
             'keg_status' => 'Aktif',
-            'keg_created_by' => 'user', // Asumsikan user yang login sebagai pembuat
+            'keg_created_by' => Cookie::get('username', 'default_user'), // Asumsikan user yang login sebagai pembuat
             'keg_created_date' => now(),
         ]);
 
@@ -167,7 +167,7 @@ class KegiatanController extends Controller
             'keg_jam_selesai' => $request->keg_jam_selesai,
             'keg_tempat' => $request->keg_tempat,
             'keg_kategori' => $status,
-            'keg_modif_by' => 'user',
+            'keg_modif_by' => Cookie::get('username', 'default_user'),
             'keg_modif_date' => now(),
 
         ]);
@@ -198,7 +198,7 @@ class KegiatanController extends Controller
 
         $jadwalKegiatan = Kegiatan::where('keg_status', 'Aktif')
             ->where('keg_nama', 'like', '%' . $query . '%')
-            ->get();
+            ->paginate(5);
 
         return view('jadwalKegiatan.read', compact('jadwalKegiatan'))->with('query', $query);
     }
@@ -208,8 +208,6 @@ class KegiatanController extends Controller
     // DOKUMENTASI KEGIATAN
     public function indexDokum(): View
     {
-      
-
         // Fetch only active news and order by ber_tgl in descending order
         $kegiatan = Kegiatan::where('keg_status', 'aktif')
             ->where('keg_kategori', 'Terlaksana')
@@ -286,7 +284,7 @@ class KegiatanController extends Controller
 
         // Validasi data input langsung dengan validate
         $request->validate([
-            'keg_link_folder' => 'required|string|max:255',
+            'keg_link_folder' => 'required|string',
             'keg_dok_notulen' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
             'keg_status_dok_notulen' => 'required|in:Privat,Publik',
             'keg_foto_sampul' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -317,7 +315,7 @@ class KegiatanController extends Controller
         }
     
         // Update kolom yang mencatat waktu dan pengguna modifikasi
-        $kegiatan->keg_modif_by = 'User';
+        $kegiatan->keg_modif_by = Cookie::get('username', 'default_user');
         $kegiatan->keg_modif_date = now();
         $kegiatan->keg_kategori = 'Terlaksana';
     
@@ -354,10 +352,10 @@ class KegiatanController extends Controller
             'keg_jam_selesai' => 'required|date_format:H:i|after:keg_jam_mulai', // Jam selesai harus lebih besar dari jam mulai jika tanggal sama
             'keg_tempat' => 'required|string|max:100',
             'keg_deskripsi' => 'nullable|string',
-            'keg_link_folder' => 'required|string|max:255',
-            'keg_dok_notulen' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
+            'keg_link_folder' => 'required|string',
+            'keg_dok_notulen' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
             'keg_status_dok_notulen' => 'required|in:Privat,Publik',
-            'keg_foto_sampul' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'keg_foto_sampul' => 'nullable|image|mimes:jpeg,png,jpg',
         ], [
             'keg_tgl_selesai.after_or_equal' => 'Tanggal selesai kegiatan harus sesudah tanggal mulai', // Pesan kustom
             'keg_jam_selesai.after' => 'Jam selesai kegiatan harus lebih besar dari jam mulai kegiatan jika tanggal mulai dan tanggal selesai sama',
@@ -396,7 +394,7 @@ class KegiatanController extends Controller
         }
     
         // Update metadata
-        $kegiatan->keg_modif_by = auth()->user()->name ?? 'System';
+        $kegiatan->keg_modif_by = Cookie::get('username', 'default_user');
         $kegiatan->keg_modif_date = now();
         $kegiatan->keg_kategori = 'Terlaksana';
         
@@ -451,13 +449,11 @@ class KegiatanController extends Controller
         $query = $request->input('query');
 
         $kegiatan = Kegiatan::where('keg_status', 'Aktif')
-            ->where('keg_kategori', 'Terlaksana')
-            ->where('keg_nama', 'like', '%' . $query . '%')
-            ->get();
+        ->where('keg_nama', 'like', '%' . $query . '%')
+        ->paginate(5);
 
         return view('dokumentasiKegiatan.read', compact('kegiatan'))->with('query', $query);
 
     }
-
 
 }
